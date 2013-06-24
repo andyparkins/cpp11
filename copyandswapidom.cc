@@ -18,7 +18,7 @@ class T {
 
 	// "The Big Three", constructor, copy constructor, assignment
 	// operator, all need declaring or none.
-	T(const T&O) :
+	T(const T& O) :
 		// C++11 lets us call other constructors, we'll use this to
 		// allocate our resources
 		T(O.size) {
