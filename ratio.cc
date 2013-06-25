@@ -3,6 +3,7 @@
 #include <cstdint>
 using namespace std;
 
+// Stolen the idea from chrono::duration
 template<typename _Rep, typename _Scale = ratio<1>>
 struct physicalUnit {
 	typedef _Rep rep;
@@ -14,14 +15,29 @@ struct physicalUnit {
 	static_assert(_Scale::den != 0, "scale must have non-zero denominator");
 
 	// Explicit members
-	physicalUnit() = default;
+	physicalUnit() = delete;
 	physicalUnit(const physicalUnit&) = default;
 	~physicalUnit() = default;
 	physicalUnit& operator=(const physicalUnit&) = default;
+
+	// Value constructors
+	constexpr physicalUnit(const rep &_r) : r(_r) {}
+
+	// Store the value
+	constexpr rep count() const { return r; }
+
+  protected:
+	rep r;
 };
 
 template<typename _Rep, typename _Scale = ratio<1>>
-struct physicalDistance : public physicalUnit<_Rep,_Scale> {};
+struct physicalDistance : public physicalUnit<_Rep,_Scale> {
+	using typename physicalUnit<_Rep,_Scale>::rep;
+	using typename physicalUnit<_Rep,_Scale>::scale;
+
+	constexpr physicalDistance(const rep &_r) :
+		physicalUnit<rep, scale>(_r) {}
+};
 template<typename _Rep, typename _Scale = ratio<1>>
 struct physicalMass : public physicalUnit<_Rep,_Scale> {};
 
@@ -45,6 +61,15 @@ typedef physicalDistance<int64_t, ratio<36*254,100>> yards;
 // 1760 yards in 1 mile or 1760*36*0.254 m = 1 mile
 typedef physicalDistance<int64_t, ratio<1760*36*254,100>> miles;
 
+// ---- User defined literals
+
+// Distance literals
+constexpr kilometers operator "" _km( unsigned long long km ) {
+	return kilometers(static_cast<kilometers::rep>(km));
+}
+//constexpr kilometers operator "" _km( int km ) {
+//	return kilometers(static_cast<kilometers::rep>(km));
+//}
 
 int main()
 {
@@ -68,6 +93,8 @@ int main()
 	cerr << "exa   = " << exa::num << " / " << exa::den << endl;
 //	cerr << "zetta = " << zetta::num << " / " << zetta::den << endl;
 //	cerr << "yotta = " << yotta::num << " / " << yotta::den << endl;
+
+	cerr << "kilometers = " << (22_km).count() << " km" << endl;
 
 	return 0;
 }
