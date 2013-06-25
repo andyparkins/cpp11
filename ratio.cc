@@ -3,9 +3,49 @@
 #include <cstdint>
 using namespace std;
 
+// http://en.wikipedia.org/wiki/Fundamental_unit
+template<int _Mass = 0,
+	int _Distance = 0,
+	int _Duration = 0,
+	int _Current = 0,
+	int _Temperature = 0,
+	int _Luminosity = 0,
+	int _Count = 0>
+struct unitDimension {
+	const int mass = _Mass;
+	const int distance = _Distance;
+	const int duration = _Duration;
+	// Not sure why charge isn't the fundamental
+	const int current = _Current;
+	const int temperature = _Temperature;
+	const int luminosity = _Luminosity;
+	// moles are, strictly, a count, and while SI have defined it as a
+	// unit (but see the criticisms here
+	// <http://en.wikipedia.org/wiki/Mole_%28unit%29#The_mole_as_a_unit>),
+	// we might find it useful to have a count available rather than a
+	// mole.  For example, silicon deposited resistances are defined
+	// "per-square" -- i.e. unitless, like moles.  Other examples can
+	// be found here <http://en.wikipedia.org/wiki/Dimensionless_quantity>
+	const int count = _Count;
+};
+// All physical units can be defined by the product of these dimensions
+// raised to various powers.  The fundamentals are obvious,
+using Mass = unitDimension<1,0,0,0,0,0,0>;
+using Distance = unitDimension<0,1,0,0,0,0,0>;
+using Duration = unitDimension<0,0,1,0,0,0,0>;
+// Then we have the compound dimensions:
+// distance per duration
+using Velocity = unitDimension<0,1,-1,0,0,0,0>;
+// distance per duration per duration
+using Acceleration = unitDimension<0,1,-2,0,0,0,0>;
+// time^4 * current^2 per square-meter per kilogram
+using Capacitance = unitDimension<-1,-2,4,2,0,0,0>;
+
+
 // Stolen the idea from chrono::duration
-template<typename _Rep, typename _Scale = ratio<1>>
+template<typename _Dimension, typename _Rep, typename _Scale = ratio<1>>
 struct physicalUnit {
+	typedef _Dimension dimension;
 	typedef _Rep rep;
 	typedef _Scale scale;
 
@@ -31,15 +71,16 @@ struct physicalUnit {
 };
 
 template<typename _Rep, typename _Scale = ratio<1>>
-struct physicalDistance : public physicalUnit<_Rep,_Scale> {
-	using typename physicalUnit<_Rep,_Scale>::rep;
-	using typename physicalUnit<_Rep,_Scale>::scale;
+struct physicalDistance : public physicalUnit<Distance, _Rep,_Scale> {
+	using typename physicalUnit<Distance, _Rep,_Scale>::dimension;
+	using typename physicalUnit<Distance, _Rep,_Scale>::rep;
+	using typename physicalUnit<Distance, _Rep,_Scale>::scale;
 
 	constexpr physicalDistance(const rep &_r) :
-		physicalUnit<rep, scale>(_r) {}
+		physicalUnit<dimension, rep, scale>(_r) {}
 };
 template<typename _Rep, typename _Scale = ratio<1>>
-struct physicalMass : public physicalUnit<_Rep,_Scale> {};
+struct physicalMass : public physicalUnit<Mass, _Rep,_Scale> {};
 
 // Metric
 typedef physicalDistance<int64_t, nano> nanometers;
