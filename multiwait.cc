@@ -16,7 +16,7 @@ class TEventWaiter
 {
   public:
 	TEventWaiter() = default;
-	TEventWaiter(initializer_list<TNotifier&> &il);
+	TEventWaiter(const initializer_list<TNotifier*> &);
 	~TEventWaiter();
 	// Refuse to copy, we only have one pending flag
 	TEventWaiter(const TEventWaiter &) = delete;
@@ -75,8 +75,10 @@ class TNotifier
 
 
 
-TEventWaiter::TEventWaiter(initializer_list<TNotifier&> &il)
+TEventWaiter::TEventWaiter(const initializer_list<TNotifier *> &il)
 {
+	for( auto e : il )
+		watch(e);
 }
 
 TEventWaiter::~TEventWaiter()
@@ -177,12 +179,10 @@ void delayThenEvent(TNotifier *E, const chrono::milliseconds &dura)
 int main()
 {
 	TNotifier E1, E2;
-	TEventWaiter EW;
 
 	// After watch, we cannot miss an event, we therefore always start
 	// watching before we initiate the action
-	EW.watch(&E1);
-	EW.watch(&E2);
+	TEventWaiter EW { &E1, &E2 };
 
 	// Make two basic threads to do nothing but delay then signal
 	thread t1(bind(delayThenEvent, &E1, chrono::milliseconds( 5500 )));
