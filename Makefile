@@ -1,7 +1,7 @@
 SOURCES   := $(wildcard *.cc)
 EXES      := $(SOURCES:.cc=)
 
-CCFLAGS   := -ggdb3 -O2 -Wall -Wextra -std=c++11
+CCFLAGS   := -ggdb3 -O2 -Wall -Wextra -std=c++11 -Wfatal-errors
 LDFLAGS   := -pthread -rdynamic 
 
 CXX       := clang++
