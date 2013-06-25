@@ -43,7 +43,7 @@ class TLockingQueue
 		// Multiple locks should be an unordered lock, adopt them
 		lock(lockOurs, lockTheirs);
 
-		// No need to swap the locks, they're both locked 
+		// No need to swap the locks, they're both locked
 
 		swap(mQueue, O.mQueue);
 
@@ -58,7 +58,14 @@ class TLockingQueue
 
 	// --------------------
 
-	void push(T O) {
+	void push(T&& O) {
+		unique_lock<mutex> lock(mQueueLock);
+		// Force use of move-push
+		mQueue.push(move(O));
+		mQueueEvent.notify_one();
+	}
+
+	void push(const T &O) {
 		unique_lock<mutex> lock(mQueueLock);
 		mQueue.push(O);
 		mQueueEvent.notify_one();
@@ -74,7 +81,9 @@ class TLockingQueue
 		if( mQueue.empty() )
 			throw runtime_error("Wakeup with empty queue");
 
-		T ret {mQueue.front()};
+		// We can safely use move since we're about to pop() If there is
+		// no move constructor for T, this will just copy construct.
+		T ret {move(mQueue.front())};
 		mQueue.pop();
 		// Rely on T having move semantics if it wants speed
 		return ret;
@@ -90,6 +99,10 @@ class TLockingQueue
 		return mQueue.size();
 	}
 
+	void wake() {
+		mQueueEvent.notify_one();
+	}
+
   protected:
 	mutable mutex mQueueLock;
 	queue<T> mQueue;
@@ -103,19 +116,24 @@ int main()
 {
 	TPointerQueue q;
 
-//	q.push(unique_ptr<int>(new int(0));
-//	q.push(new int{0});
-//	q.push(new int{0});
-//	q.push(new int{0});
+	q.push( unique_ptr<int>( new int(0) ) );
+	q.push( unique_ptr<int>( new int(1) ) );
+	q.push( unique_ptr<int>( new int(2) ) );
+	q.push( unique_ptr<int>( new int(3) ) );
 
+	cerr << "Creating queue" << endl;
 	cerr << "q.size() = " << q.size() << endl;
 
+	cerr << "Moving constructing queue from q to q2" << endl;
 	// Can't copy unique_ptr, so can't copy a queue of unique_ptr; but
 	// we can move it, this should leave q empty
 	TPointerQueue q2 {std::move(q)};
 
 	cerr << "q.size() = " << q.size() << endl;
 	cerr << "q2.size() = " << q2.size() << endl;
+
+	// pop
+	unique_ptr<int> p = q2.pop();
 
 	return 0;
 }
