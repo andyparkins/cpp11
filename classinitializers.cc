@@ -13,17 +13,24 @@ class SomeClass : public SomeOtherClass {
 		return NAME;
 	}
   private:
-	static const string NAME;
+	// C++11 allows us to initialise members inline ... unfortunately
+	// not statics
+	const string NAME = "SomeClass";
 };
-const string SomeClass::NAME = "SomeClass";
 
 int main()
 {
 	SomeClass x;
 	string name(x.getName());
-	cerr << "name = " << name << endl;
+	cerr << "Before..." << endl;
+	cerr << "x.getName() = " << x.getName() << endl;
+	cerr << "name        = " << name << endl;
+
+	cerr << "Altering copy" << endl;
 	name[0] = 's';
 	cerr << "name = " << name << endl;
+	cerr << "x.getName() = " << x.getName() << endl;
+	cerr << "name        = " << name << endl;
 
 	return 0;
 }
