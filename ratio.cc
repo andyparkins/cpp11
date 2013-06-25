@@ -14,14 +14,14 @@ struct physicalUnit {
 	static_assert(_Scale::num > 0, "scale must have positive numerator");
 	static_assert(_Scale::den != 0, "scale must have non-zero denominator");
 
-	// Explicit members
-	physicalUnit() = delete;
-	physicalUnit(const physicalUnit&) = default;
+	// Construction/destruction/copy
+	constexpr physicalUnit() = delete;
+	constexpr explicit physicalUnit(const rep &_r) :
+		r(static_cast<rep>(_r)) {}
+	constexpr physicalUnit(const physicalUnit& O) :
+		r(O.count()) {}
 	~physicalUnit() = default;
 	physicalUnit& operator=(const physicalUnit&) = default;
-
-	// Value constructors
-	constexpr physicalUnit(const rep &_r) : r(_r) {}
 
 	// Store the value
 	constexpr rep count() const { return r; }
