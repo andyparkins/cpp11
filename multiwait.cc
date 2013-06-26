@@ -48,7 +48,7 @@ class TNotifier
 	void subscribe( TEventWaiter *EW ) {
 		unique_lock<mutex> L(mSubscriberLock);
 		mSubscribers.insert(EW);
-	};
+	}
 	void unsubscribe( TEventWaiter *EW ) {
 		unique_lock<mutex> L(mSubscriberLock);
 		auto it = mSubscribers.find(EW);
