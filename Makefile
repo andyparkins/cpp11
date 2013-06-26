@@ -1,5 +1,6 @@
 SOURCES   := $(wildcard *.cc)
 EXES      := $(SOURCES:.cc=)
+CHECKS    := $(SOURCES:.cc=.check)
 
 CCFLAGS   := -ggdb3 -O2 -Wall -Wextra -std=c++11 -Wfatal-errors
 LDFLAGS   := -pthread -rdynamic 
@@ -12,13 +13,22 @@ default: build
 # --- build
 build: $(EXES)
 
+check: $(CHECKS)
+
 info:
 	@echo "SOURCES := $(SOURCES)"
+	@echo "CHECKS  := $(CHECKS)"
 	@echo "EXES    := $(EXES)"
 
 
 %.run: %
 	./$<
+
+%.check: %.cc
+	cppcheck --enable=all --std=c++11 --verbose $<
+
+%.style: %.cc
+	KWStyle -v -xml KWStyle.xml -gcc $<
 
 # --------
 
