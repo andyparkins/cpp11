@@ -11,7 +11,7 @@ template<int _Mass = 0,
 	int _Temperature = 0,
 	int _Luminosity = 0,
 	int _Count = 0>
-struct unitDimension {
+struct compoundDimension {
 	const int mass = _Mass;
 	const int distance = _Distance;
 	const int duration = _Duration;
@@ -29,17 +29,20 @@ struct unitDimension {
 	const int count = _Count;
 };
 // All physical units can be defined by the product of these dimensions
-// raised to various powers.  The fundamentals are obvious,
-using Mass = unitDimension<1,0,0,0,0,0,0>;
-using Distance = unitDimension<0,1,0,0,0,0,0>;
-using Duration = unitDimension<0,0,1,0,0,0,0>;
+// raised to various powers.  The fundamental units are one one:
+using Mass = compoundDimension<1,0,0,0,0,0,0>;
+using Distance = compoundDimension<0,1,0,0,0,0,0>;
+using Duration = compoundDimension<0,0,1,0,0,0,0>;
+using Current = compoundDimension<0,0,0,1,0,0,0>;
+using Temperature = compoundDimension<0,0,0,0,1,0,0>;
+using LuminousIntensity = compoundDimension<0,0,0,0,0,1,0>;
 // Then we have the compound dimensions:
 // distance per duration
-using Velocity = unitDimension<0,1,-1,0,0,0,0>;
+using Velocity = compoundDimension<0,1,-1,0,0,0,0>;
 // distance per duration per duration
-using Acceleration = unitDimension<0,1,-2,0,0,0,0>;
+using Acceleration = compoundDimension<0,1,-2,0,0,0,0>;
 // time^4 * current^2 per square-meter per kilogram
-using Capacitance = unitDimension<-1,-2,4,2,0,0,0>;
+using Capacitance = compoundDimension<-1,-2,4,2,0,0,0>;
 
 
 // Stolen the idea from chrono::duration
@@ -69,6 +72,27 @@ struct physicalUnit {
   protected:
 	rep r;
 };
+
+//template<a,b,c,d,e,f,g,A,B,C,D,E,F,G>
+//physicalUnit<
+//	compoundDimension<A + a, B + b, C + c, D + d, E + e, F + f, G + g>,
+//		_Rep, _Scale> &
+//operator*=( const physicalUnit &O ) {
+//		// Value
+//		r *= O.r;
+//		physicalUnit<
+//			compoundDimension<
+//				_Dimension::_Mass + a,
+//				_Dimension::_Distance + b,
+//				_Dimension::_Duration + c,
+//				_Dimension::_Current + d,
+//				_Dimension::_Temperature + e,
+//				_Dimension::_Luminosity + f,
+//				_Dimension::_Count + g>,
+//			_Rep, _Scale> &
+//
+//	}
+
 
 template<typename _Rep, typename _Scale = ratio<1>>
 struct physicalDistance : public physicalUnit<Distance, _Rep,_Scale> {
