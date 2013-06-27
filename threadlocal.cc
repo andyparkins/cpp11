@@ -4,14 +4,7 @@ using namespace std;
 
 constexpr int INIT = 10;
 
-#ifndef __clang__
-// Last I tried this wasn't supported by clang 3.2, but does work with
-// gcc 4.8
 thread_local int x = INIT;
-#else
-#	warning "thread_local not known to work yet on clang"
-int x = INIT;
-#endif
 
 
 void incrementX()
