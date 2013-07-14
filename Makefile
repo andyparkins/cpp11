@@ -1,9 +1,11 @@
 SOURCES   := $(wildcard *.cc)
 EXES      := $(SOURCES:.cc=)
 CHECKS    := $(SOURCES:.cc=.check)
+PKGLIBS   := cppunit
 
-CCFLAGS   := -ggdb3 -O2 -Wall -Wextra -std=c++11 -Wfatal-errors
-LDFLAGS   := -pthread -rdynamic 
+CCFLAGS   := -ggdb3 -O2 -Wall -Wextra -std=c++11 -Wfatal-errors \
+			$(shell pkg-config --cflags $(PKGLIBS))
+LDFLAGS   := -pthread -rdynamic $(shell pkg-config --libs $(PKGLIBS))
 
 CXX       := clang++
 
