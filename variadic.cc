@@ -37,6 +37,15 @@ ostream &out(ostream &s, ThisT thisParam, RestT... nextParams)
 }
 
 
+// ----
+
+
+//template<typename... Args>
+//inline ostream &lambdaOut(ostream &s, Args &&... args) {
+//	auto f = [&]{ s << args << endl, 1; }...;
+//}
+
+
 //#ifdef UNITTEST
 #include <stdexcept>
 #include <iostream>
@@ -62,9 +71,14 @@ class FunctionalTest : public CppUnit::TestFixture
 		out( clog, 1, 2.5, "three");
 	}
 
+	void testVariadicLambda() {
+//		lambdaOut( clog, 1, 2.5, "three");
+	}
+
 	// --- Auto-generate suite() convenience function
 	CPPUNIT_TEST_SUITE(FunctionalTest);
 	CPPUNIT_TEST(testVariadic);
+	CPPUNIT_TEST(testVariadicLambda);
 	CPPUNIT_TEST_SUITE_END();
 };
 // Add result of AxiomsTest::suite() to test registry
