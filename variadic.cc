@@ -1,9 +1,14 @@
 #include <iostream>
 using namespace std;
 
+// Provide a do-nothing function that will accept any number of
+// arguments
+template<typename... Ignore> inline void pass(Ignore&&...) {}
+
+
 // specialisation for doing the work on a single parameter
 template<typename ThisT>
-ostream &out(ostream &s, ThisT thisParam)
+ostream &out(ostream &s, const ThisT &thisParam)
 {
 	s << thisParam << endl;
 	return s;
@@ -32,7 +37,23 @@ template<typename ThisT, typename... RestT>
 ostream &out(ostream &s, ThisT thisParam, RestT... nextParams)
 {
 	out(s, thisParam);
-	out(s, nextParams...);
+	// the "..." expansion operator takes a "..." template parameter and
+	// comma separates using the pattern it wraps.
+	// out(s, nextParams...);
+	// For example, the following would turn the parameters into an
+	// initializer list
+	//   {nextParams...}
+	// This would return the count of params
+	//   sizeof... (nextParams)
+	// This would call some other function with each
+	//   other_func(nextParams)...
+	// That last is exactly what we want.  Except we can't do it,
+	// because C++ requires ";" between commands, not ",".
+	//   out(s, nextParams)...;
+	//   -> out(s, p1), out(s, p2), out(s, p3), etc; // fails.
+	// we can cheat that by wrapping the expansion in a do-nothing
+	// function, then it's arguments can be separated by commas
+	pass(out(s, nextParams)...);
 	return s;
 }
 
