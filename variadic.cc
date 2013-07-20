@@ -54,17 +54,20 @@ ostream &out(ostream &s, ThisT thisParam, RestT... nextParams)
 	// we can cheat that by wrapping the expansion in a do-nothing
 	// function, then it's arguments can be separated by commas
 	pass(out(s, nextParams)...);
+	// if we can do that though, why do we need out() at all?  See
+	// outInOne below
 	return s;
 }
 
 
 // ----
 
+template<typename... Args>
+inline ostream &outInOne(ostream &s, Args &&... args) {
 
-//template<typename... Args>
-//inline ostream &lambdaOut(ostream &s, Args &&... args) {
-//	auto f = [&]{ s << args << endl, 1; }...;
-//}
+	pass( (s << args, 1)... );
+	return s;
+}
 
 
 //#ifdef UNITTEST
