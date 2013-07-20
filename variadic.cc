@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <string>
 using namespace std;
 
 // Provide a do-nothing function that will accept any number of
@@ -10,7 +12,7 @@ template<typename... Ignore> inline void pass(Ignore&&...) {}
 template<typename ThisT>
 ostream &out(ostream &s, const ThisT &thisParam)
 {
-	s << thisParam << endl;
+	s << thisParam;
 	return s;
 }
 
@@ -92,11 +94,17 @@ class FunctionalTest : public CppUnit::TestFixture
 
 	// --- Tests
 	void testVariadic() {
-		out( clog, 1, 2.5, "three");
+		ostringstream ss;
+		out( ss, 1, 2.5, "three");
+		string expect("12.5three");
+		CPPUNIT_ASSERT_EQUAL(expect, ss.str());
 	}
 
 	void testVariadicLambda() {
-//		lambdaOut( clog, 1, 2.5, "three");
+		ostringstream ss;
+		outInOne( ss, 1, 2.5, "three");
+		string expect("12.5three");
+		CPPUNIT_ASSERT_EQUAL(expect, ss.str());
 	}
 
 	// --- Auto-generate suite() convenience function
