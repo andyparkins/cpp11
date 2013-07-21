@@ -72,6 +72,16 @@ inline ostream &outInOne(ostream &s, Args &&... args) {
 }
 
 
+// ----
+
+template<typename... Args>
+struct variadicCount {
+	static const size_t n;
+};
+template<typename... Args>
+const size_t variadicCount<Args...>::n = sizeof... (Args);
+
+
 //#ifdef UNITTEST
 #include <stdexcept>
 #include <iostream>
@@ -107,10 +117,24 @@ class FunctionalTest : public CppUnit::TestFixture
 		CPPUNIT_ASSERT_EQUAL(expect, ss.str());
 	}
 
+	void testVariadicCount() {
+		using c0 = variadicCount<>;
+		using c1 = variadicCount<int>;
+		using c2 = variadicCount<int, int>;
+		using c3 = variadicCount<int, int, int>;
+		using c4 = variadicCount<int, int, int, int>;
+		CPPUNIT_ASSERT_EQUAL(0U, c0::n);
+		CPPUNIT_ASSERT_EQUAL(1U, c1::n);
+		CPPUNIT_ASSERT_EQUAL(2U, c2::n);
+		CPPUNIT_ASSERT_EQUAL(3U, c3::n);
+		CPPUNIT_ASSERT_EQUAL(4U, c4::n);
+	}
+
 	// --- Auto-generate suite() convenience function
 	CPPUNIT_TEST_SUITE(FunctionalTest);
 	CPPUNIT_TEST(testVariadic);
 	CPPUNIT_TEST(testVariadicLambda);
+	CPPUNIT_TEST(testVariadicCount);
 	CPPUNIT_TEST_SUITE_END();
 };
 // Add result of AxiomsTest::suite() to test registry
