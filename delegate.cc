@@ -20,6 +20,20 @@ class functor_as_c_function {
 	}
 };
 
+// ---------
+
+// This is a simulation of a really unpleasant callback; the library
+// writer hasn't given us an opaque pointer.
+extern "C" int bare_instant_callback( int (*cb)(void*) );
+
+template<int(*UnopaqueFunction)(void*), void *Opaque>
+class bare_wrapping_callback {
+  public:
+	static int callback_with_opaque() {
+		return UnopaqueFunction(Opaque);
+	}
+};
+
 
 //#ifdef UNITTEST
 #include <stdexcept>
@@ -57,9 +71,16 @@ class FunctionalTest : public CppUnit::TestFixture
 		CPPUNIT_ASSERT_EQUAL(11, instant_callback(cf::c_function, &mFunctor));
 	}
 
+	void testBareCallback() {
+		typedef functor_as_c_function<decltype(mFunctor)> cf;
+		typedef bare_wrapping_callback<cf::c_function, &mFunctor> bcf;
+		clog << bare_instant_callback(bcf) << endl;
+	}
+
 	// --- Auto-generate suite() convenience function
 	CPPUNIT_TEST_SUITE(FunctionalTest);
 	CPPUNIT_TEST(testCallback);
+	CPPUNIT_TEST(testBareCallback);
 	CPPUNIT_TEST_SUITE_END();
 };
 // Add result of AxiomsTest::suite() to test registry
