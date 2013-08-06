@@ -22,12 +22,7 @@ bool Obj::DestructorCalled = false;
 #include <stdexcept>
 #include <iostream>
 // --- cppunit
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
 #include <cppunit/extensions/HelperMacros.h>
-// Runner
-#include <cppunit/ui/text/TestRunner.h>
-#include <cppunit/TextOutputter.h>
 
 // ----
 
@@ -57,6 +52,10 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ObjectTest);
 
 // -------------- main()
 //#ifndef UNITTESTALL
+// --- cppunit runner
+#include <cppunit/ui/text/TestRunner.h>
+#include <cppunit/TextOutputter.h>
+// ---
 #include <iostream>
 #include <stdexcept>
 int main()
