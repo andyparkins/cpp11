@@ -70,19 +70,19 @@ class BooleanTest : public CppUnit::TestFixture
 	void tearDown() { }
 
 	// --- Tests
-	void testComparison() {
+	void testBooleanEquivalence() {
 		T b1;
 		T b2;
 	}
 
 	// --- Auto-generate suite() convenience function
-	typedef BooleanTest<T,P> SelfT;
+	typedef BooleanTest<T> SelfT;
 	CPPUNIT_TEST_SUITE(SelfT);
 	CPPUNIT_TEST(testBooleanEquivalence);
 	CPPUNIT_TEST_SUITE_END();
 };
-typedef BooleanTest<example_struct*, example_struct> TestClass;
-CPPUNIT_TEST_SUITE_REGISTRATION( TestClass );
+typedef BooleanTest<example_struct> BooleanTestClass;
+CPPUNIT_TEST_SUITE_REGISTRATION( BooleanTestClass );
 
 
 // -------------- main()
