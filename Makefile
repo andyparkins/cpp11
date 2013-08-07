@@ -22,6 +22,7 @@ info:
 	@echo "CHECKS  := $(CHECKS)"
 	@echo "EXES    := $(EXES)"
 
+runall: $(patsubst %,%.run,$(EXES))
 
 %.run: %
 	./$<
