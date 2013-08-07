@@ -160,11 +160,6 @@ int main()
 	// Redirect output to clog,
 	runner.setOutputter(new CppUnit::TextOutputter(&runner.result(), std::clog));
 	// Run all and give success indiciation
-	try {
-		return runner.run("", false) ? 0 : 1;
-	} catch( exception &e ) {
-		clog << "EXCEPTION: " << e.what() << endl;
-		return 2;
-	}
+	return runner.run("", false) ? 0 : 1;
 }
 //#endif
