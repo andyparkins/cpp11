@@ -9,8 +9,7 @@ template<int _Mass = 0,
 	int _Duration = 0,
 	int _Current = 0,
 	int _Temperature = 0,
-	int _Luminosity = 0,
-	int _Count = 0>
+	int _Luminosity = 0>
 struct compoundDimension {
 	const int mass = _Mass;
 	const int distance = _Distance;
@@ -19,15 +18,15 @@ struct compoundDimension {
 	const int current = _Current;
 	const int temperature = _Temperature;
 	const int luminosity = _Luminosity;
-	// moles are, strictly, a count, and while SI have defined it as a
-	// unit (but see the criticisms here
-	// <http://en.wikipedia.org/wiki/Mole_%28unit%29#The_mole_as_a_unit>),
-	// we might find it useful to have a count available rather than a
-	// mole.  For example, silicon deposited resistances are defined
-	// "per-square" -- i.e. unitless, like moles.  Other examples can
-	// be found here <http://en.wikipedia.org/wiki/Dimensionless_quantity>
-	const int count = _Count;
 };
+// moles are, strictly, a count, and while SI have defined it as a
+// unit (but see the criticisms here
+// <http://en.wikipedia.org/wiki/Mole_%28unit%29#The_mole_as_a_unit>),
+// we might find it useful to have a count available rather than a
+// mole.  For example, silicon deposited resistances are defined
+// "per-square" -- i.e. unitless, like moles.  Other examples can
+// be found here <http://en.wikipedia.org/wiki/Dimensionless_quantity>
+using Dimensionless = compoundDimension<0,0,0,0,0,0,0>;
 // All physical units can be defined by the product of these dimensions
 // raised to various powers.  The fundamental units are one one:
 using Mass = compoundDimension<1,0,0,0,0,0,0>;
