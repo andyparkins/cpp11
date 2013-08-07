@@ -77,5 +77,5 @@ int main()
 		<< NeutronStarRadius.km()
 			<< "km" << endl;
 
-	return 1;
+	return 0;
 }
