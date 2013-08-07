@@ -26,22 +26,22 @@ struct compoundDimension {
 // mole.  For example, silicon deposited resistances are defined
 // "per-square" -- i.e. unitless, like moles.  Other examples can
 // be found here <http://en.wikipedia.org/wiki/Dimensionless_quantity>
-using Dimensionless = compoundDimension<0,0,0,0,0,0,0>;
+using Dimensionless = compoundDimension<0,0,0,0,0,0>;
 // All physical units can be defined by the product of these dimensions
 // raised to various powers.  The fundamental units are one one:
-using Mass = compoundDimension<1,0,0,0,0,0,0>;
-using Distance = compoundDimension<0,1,0,0,0,0,0>;
-using Duration = compoundDimension<0,0,1,0,0,0,0>;
-using Current = compoundDimension<0,0,0,1,0,0,0>;
-using Temperature = compoundDimension<0,0,0,0,1,0,0>;
-using LuminousIntensity = compoundDimension<0,0,0,0,0,1,0>;
+using Mass = compoundDimension<1,0,0,0,0,0>;
+using Distance = compoundDimension<0,1,0,0,0,0>;
+using Duration = compoundDimension<0,0,1,0,0,0>;
+using Current = compoundDimension<0,0,0,1,0,0>;
+using Temperature = compoundDimension<0,0,0,1,0,0>;
+using LuminousIntensity = compoundDimension<0,0,0,0,1,0>;
 // Then we have the compound dimensions:
 // distance per duration
-using Velocity = compoundDimension<0,1,-1,0,0,0,0>;
+using Velocity = compoundDimension<0,1,-1,0,0,0>;
 // distance per duration per duration
-using Acceleration = compoundDimension<0,1,-2,0,0,0,0>;
+using Acceleration = compoundDimension<0,1,-2,0,0,0>;
 // time^4 * current^2 per square-meter per kilogram
-using Capacitance = compoundDimension<-1,-2,4,2,0,0,0>;
+using Capacitance = compoundDimension<-1,-2,4,2,0,0>;
 
 
 // Stolen the idea from chrono::duration
