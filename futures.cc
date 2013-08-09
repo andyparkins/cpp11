@@ -66,12 +66,14 @@ class FutureTest : public CppUnit::TestFixture
 		future<int> f1 = task.get_future();
 
 		CPPUNIT_ASSERT_EQUAL(true, f1.valid());
-//		CPPUNIT_ASSERT_EQUAL(future_status::timeout,
-//				f1.wait_for(chrono::seconds(0)));
+//		CPPUNIT_ASSERT_EQUAL(false, f1.has_value());
+//		CPPUNIT_ASSERT_EQUAL(false, f1.has_exception());
 
 		// launch on a thread
 		thread(move(task)).detach();
 
+//		CPPUNIT_ASSERT_EQUAL(true, f1.has_value());
+//		CPPUNIT_ASSERT_EQUAL(false, f1.has_exception());
 		CPPUNIT_ASSERT_EQUAL(7, f1.get());
 	}
 
