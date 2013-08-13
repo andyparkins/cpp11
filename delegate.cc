@@ -34,6 +34,15 @@ class bare_wrapping_callback {
 	}
 };
 
+// ---------
+
+class Object {
+  public:
+	int member() {
+		return 21;
+	}
+};
+
 
 //#ifdef UNITTEST
 #include <stdexcept>
@@ -78,10 +87,17 @@ class FunctionalTest : public CppUnit::TestFixture
 //		clog << bare_instant_callback(bcf) << endl;
 	}
 
+	void testMem_fn() {
+		auto mfn = mem_fn(&Object::member);
+		Object O;
+		CPPUNIT_ASSERT_EQUAL(21, mfn(O));
+	}
+
 	// --- Auto-generate suite() convenience function
 	CPPUNIT_TEST_SUITE(FunctionalTest);
 	CPPUNIT_TEST(testCallback);
 	CPPUNIT_TEST(testBareCallback);
+	CPPUNIT_TEST(testMem_fn);
 	CPPUNIT_TEST_SUITE_END();
 };
 // Add result of AxiomsTest::suite() to test registry
