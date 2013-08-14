@@ -9,7 +9,6 @@
 
 
 // -------------- Macros
-#define UNITTEST
 
 
 // -------------- Module Globals

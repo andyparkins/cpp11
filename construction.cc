@@ -18,7 +18,7 @@ class Obj {
 bool Obj::DestructorCalled = false;
 
 
-//#ifdef UNITTEST
+#ifdef UNITTEST
 #include <stdexcept>
 #include <iostream>
 // --- cppunit
@@ -51,7 +51,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ObjectTest);
 
 
 // -------------- main()
-//#ifndef UNITTESTALL
+#ifndef UNITTESTALL
 // --- cppunit runner
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/TextOutputter.h>
@@ -69,5 +69,5 @@ int main()
 	// Run all and give success indiciation
 	return runner.run() ? 0 : 1;
 }
-//#endif
-//#endif
+#endif
+#endif

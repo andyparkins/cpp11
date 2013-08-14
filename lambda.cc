@@ -15,7 +15,7 @@ class TRow {
 
 
 
-//#ifdef UNITTEST
+#ifdef UNITTEST
 #include <stdexcept>
 #include <iostream>
 // --- cppunit
@@ -138,7 +138,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( LambdaTest );
 
 
 // -------------- main()
-//#ifndef UNITTESTALL
+#ifndef UNITTESTALL
 #include <iostream>
 #include <stdexcept>
 int main()
@@ -152,5 +152,5 @@ int main()
 	// Run all and give success indiciation
 	return runner.run() ? 0 : 1;
 }
-//#endif
-//#endif
+#endif
+#endif

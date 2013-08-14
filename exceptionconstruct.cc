@@ -21,7 +21,7 @@ class verbose_object
 };
 
 
-//#ifdef UNITTEST
+#ifdef UNITTEST
 #include <stdexcept>
 #include <iostream>
 // --- cppunit
@@ -148,6 +148,7 @@ class ExceptionTest : public CppUnit::TestFixture
 CPPUNIT_TEST_SUITE_REGISTRATION( ExceptionTest );
 
 
+#ifndef UNITTESTALL
 // -------------- main()
 
 int main()
@@ -162,4 +163,5 @@ int main()
 	// Run all and give success indiciation
 	return runner.run("", false) ? 0 : 1;
 }
-//#endif
+#endif
+#endif

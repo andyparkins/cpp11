@@ -82,7 +82,7 @@ template<typename... Args>
 const size_t variadicCount<Args...>::n = sizeof... (Args);
 
 
-//#ifdef UNITTEST
+#ifdef UNITTEST
 #include <stdexcept>
 #include <iostream>
 // --- cppunit
@@ -142,7 +142,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( FunctionalTest );
 
 
 // -------------- main()
-//#ifndef UNITTESTALL
+#ifndef UNITTESTALL
 #include <iostream>
 #include <stdexcept>
 int main()
@@ -156,5 +156,5 @@ int main()
 	// Run all and give success indiciation
 	return runner.run() ? 0 : 1;
 }
-//#endif
-//#endif
+#endif
+#endif

@@ -12,7 +12,7 @@ class example_smart_pointer
 };
 
 
-//#ifdef UNITTEST
+#ifdef UNITTEST
 #include <stdexcept>
 #include <iostream>
 // --- cppunit
@@ -87,6 +87,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( BooleanTestClass );
 
 // -------------- main()
 
+#ifndef UNITTESTALL
 int main()
 {
 	// --- Boilerplate cppunit code
@@ -99,5 +100,6 @@ int main()
 	// Run all and give success indiciation
 	return runner.run("", false) ? 0 : 1;
 }
-//#endif
+#endif
+#endif
 

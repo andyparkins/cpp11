@@ -14,7 +14,6 @@ using namespace std;
 
 
 // -------------- Macros
-#define UNITTEST
 
 
 // -------------- Module Globals

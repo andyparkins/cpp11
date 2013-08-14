@@ -12,7 +12,6 @@ using namespace std;
 
 
 // -------------- Macros
-#define UNITTEST
 
 
 // -------------- Module Globals
@@ -68,8 +67,6 @@ std::error_condition make_error_condition(mylib_error_code e)
 template <>
 struct is_error_code_enum<mylib_error_code>
 	: public true_type {};
-
-
 
 
 // -------------- Class member static initialisers
