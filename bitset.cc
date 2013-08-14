@@ -28,6 +28,20 @@ using namespace std;
 
 
 // -------------- Class member definitions
+template<unsigned int N>
+class bitset_extra : public bitset<N>
+{
+  public:
+	// Add our own conversion from any bitset
+	template<unsigned int S>
+	bitset_extra(const bitset<S> &O) :
+		bitset<N>()
+	{
+		for(unsigned int i = 0; i < N && i < S; i++ ) {
+			(*this)[i] = O[i];
+		}
+	}
+};
 
 
 // -------------- Function definitions
@@ -112,10 +126,10 @@ class BitsetTest : public CppUnit::TestFixture
 		CPPUNIT_ASSERT_EQUAL(6UL, bs3.to_ulong());
 
 		// Shame, bitset<> has no way to construct from another bitset
-//		unsigned long long c = ((a << 32) | b);
-//		bitset<64> bs4(bs1);
-//		bitset<64> bs5(bs2);
-//		CPPUNIT_ASSERT_EQUAL(c, ((bs4 << 32) | bs5).to_ullong());
+		unsigned long long c = (((unsigned long long)(a) << 32) | b);
+		bitset_extra<64> bs4(bs1);
+		bitset_extra<64> bs5(bs2);
+		CPPUNIT_ASSERT_EQUAL(c, ((bs4 << 32) | bs5).to_ullong());
 	}
 
 	// -----------------------
