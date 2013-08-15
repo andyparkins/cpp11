@@ -130,7 +130,7 @@ class JUnitXmlOutputter : public CppUnit::XmlOutputter
 			CppUnit::XmlElement *rootNode) {
 		CppUnit::XmlElement *testElement = new CppUnit::XmlElement( "testcase" );
 		rootNode->addElement( testElement );
-		testElement->addAttribute( "id", testNumber );
+//		testElement->addAttribute( "id", testNumber );
 		std::string::size_type n = test->getName().find("::");
 		if (n != std::string::npos) {
 			testElement->addAttribute( "class", std::string(test->getName(), 0, n) );
@@ -190,9 +190,9 @@ int main(int argc, char *argv[])
 	CppUnit::TextUi::TestRunner runner;
 	runner.addTest( CppUnit::TestFactoryRegistry::getRegistry().makeTest() );
 	// Redirect output to clog,
-	JUnitXmlOutputter *outputter = new JUnitXmlOutputter(
+	CppUnit::XmlOutputter *outputter = new CppUnit::XmlOutputter(
 			&runner.result(), std::cout);
-	outputter->setName(argv[0]);
+//	outputter->setName(argv[0]);
 	runner.setOutputter(outputter);
 	// Run all and give success indiciation
 	return runner.run() ? 0 : 1;
