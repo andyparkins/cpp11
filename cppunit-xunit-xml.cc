@@ -190,9 +190,9 @@ int main(int argc, char *argv[])
 	CppUnit::TextUi::TestRunner runner;
 	runner.addTest( CppUnit::TestFactoryRegistry::getRegistry().makeTest() );
 	// Redirect output to clog,
-	CppUnit::XmlOutputter *outputter = new CppUnit::XmlOutputter(
+	JUnitXmlOutputter *outputter = new JUnitXmlOutputter(
 			&runner.result(), std::cout);
-//	outputter->setName(argv[0]);
+	outputter->setName(argv[0]);
 	runner.setOutputter(outputter);
 	// Run all and give success indiciation
 	return runner.run() ? 0 : 1;
