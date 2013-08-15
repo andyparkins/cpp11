@@ -96,7 +96,7 @@ class BitsetTest : public CppUnit::TestFixture
 		bitset<64> bs64;
 		CPPUNIT_ASSERT_EQUAL(8U, sizeof(bs64) );
 		bitset<65> bs65;
-		CPPUNIT_ASSERT_EQUAL(11U, sizeof(bs65) );
+		CPPUNIT_ASSERT_EQUAL(12U, sizeof(bs65) );
 	}
 
 	void testBitsetOps() {
