@@ -17,7 +17,7 @@
 # ----------------------------------------------------------------------------
 
 UNITTEST_PKGLIBS  := cppunit
-UNITTEST_SOURCES  ?= $(CCSOURCES)
+UNITTEST_SOURCES  ?= $(filter-out cppunit-xunit-xml.cc,$(CCSOURCES))
 UNITTEST_LIBS     ?= $(LIBS)
 UNITTEST_LIBPATH  ?= $(LIBPATH)
 UNITTEST_INCLUDES ?= $(INCLUDES)
@@ -53,7 +53,7 @@ unit-%: %.c
 		$(patsubst %,"-D%",$($*_DEFINES)) -DUNITTEST \
 		$(patsubst %,-I%,$(UNITTEST_INCLUDE)) $(patsubst %,-I%,$($*_INCLUDE)) \
 		$(patsubst %,-l%,$(UNITTEST_LIBS)) $(patsubst %,-l%,$($*_LIBS)) \
-		-o unit-$* $(UNITTEST_LDFLAGS)
+		-o $@ $(UNITTEST_LDFLAGS)
 
 # -------------
 # Rely on cppunit for test registry
@@ -61,26 +61,12 @@ unit-%.o: %.cc
 	$(HOSTCXX) $< $(UNITTEST_CCFLAGS) -O0 \
 		$(patsubst %,"-D%",$($*_DEFINES)) -DUNITTEST -DUNITTESTALL \
 		$(patsubst %,-I%,$(UNITTEST_INCLUDE)) $(patsubst %,-I%,$($*_INCLUDE)) \
-		-o unit-$*.o -c
-unit-all.o:
-	echo " \
-#include <iostream>\n\
-#include <cppunit/extensions/HelperMacros.h>\n\
-#include <cppunit/TestResult.h>\n\
-#include <cppunit/ui/text/TestRunner.h>\n\
-#include <cppunit/TextOutputter.h>\n\
-#include <cppunit/XmlOutputter.h>\n\
-int main()\n\
-{\n\
-	CppUnit::TextUi::TestRunner runner;\n\
-	CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();\n\
-	runner.addTest( registry.makeTest() );\n\
-	runner.setOutputter(new CppUnit::XmlOutputter(&runner.result(), std::clog));\n\
-	return runner.run(\"\", false) ? 0 : 1;\n\
-}" | \
-	$(HOSTCXX) $< $(UNITTEST_CCFLAGS) -O0 -xc++ \
-		$(patsubst %,-I%,$(UNITTEST_INCLUDE)) $(patsubst %,-I%,$($*_INCLUDE)) \
-		-o $@ -c -
+		-o $@ -c
+unit-all.o: cppunit-xunit-xml.cc
+	$(HOSTCXX) $< $(UNITTEST_CCFLAGS) -O0 \
+		-DUNITTEST -DUNITTESTALL \
+		$(patsubst %,-I%,$(UNITTEST_INCLUDE)) \
+		-o $@ -c
 
 unit-all: unit-all.o $(patsubst %.cc,unit-%.o,$(UNITTEST_SOURCES))
 	$(HOSTCXX) $^ \
