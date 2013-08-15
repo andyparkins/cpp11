@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 	runner.addTest( CppUnit::TestFactoryRegistry::getRegistry().makeTest() );
 	// Redirect output to clog,
 	JUnitXmlOutputter *outputter = new JUnitXmlOutputter(
-			&runner.result(), std::clog);
+			&runner.result(), std::cout);
 	outputter->setName(argv[0]);
 	runner.setOutputter(outputter);
 	// Run all and give success indiciation
