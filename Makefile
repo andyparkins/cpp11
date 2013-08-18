@@ -73,7 +73,9 @@ info:
 %.check: %.cc
 	cppcheck --enable=all --std=c++11 --verbose $<
 %.xmlcheck: %.cc
-	cppcheck --enable=all --std=c++11 --xml --verbose $< 2> $@
+	cppcheck --enable=all --std=c++11 --xml --verbose $< 2> $@.temp
+	grep -v "missingInclude" $@.temp > $@
+	-$(RM) $@.temp
 %.style: %.cc
 	KWStyle -v -xml KWStyle.xml -gcc $<
 
@@ -83,6 +85,7 @@ clean: $(INCLUDEDCLEANS)
 	-$(RM) $(EXES)
 	-$(RM) $(CCSOURCES:.cc=.o) $(CSOURCES:.cc=.o)
 	-$(RM) $(CCSOURCES:.cc=.s) $(CCSOURCES:.cc=.lst) $(CSOURCES:.cc=.s) $(CSOURCES:.cc=.lst)
+	-$(RM) $(CCCHECKS:.check=.xmlcheck)
 
 
 .SUFFIXES:
