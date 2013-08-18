@@ -36,12 +36,13 @@ include revision.mak
 
 build: $(EXES)
 
-check: $(CHECKS)
+check: $(CCCHECKS)
+xmlcheck: $(CCCHECKS:.check=.xmlcheck)
 
 info:
 	@echo "--- INFO (make)"
 	@echo "SOURCES    = $(CCSOURCES) $(CSOURCES)"
-	@echo "CHECKS     = $(CHECKS)"
+	@echo "CHECKS     = $(CCCHECKS)"
 	@echo "EXES       = $(EXES)"
 	@echo "PLATFORM   = $(PLATFORM)"
 	@echo "REVISION   = $(VERSIONSTRINGRAW)"
@@ -71,6 +72,8 @@ info:
 
 %.check: %.cc
 	cppcheck --enable=all --std=c++11 --verbose $<
+%.xmlcheck: %.cc
+	cppcheck --enable=all --std=c++11 --xml --verbose $< 2> $@
 %.style: %.cc
 	KWStyle -v -xml KWStyle.xml -gcc $<
 
