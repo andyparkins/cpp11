@@ -84,6 +84,7 @@ int main()\n\
 unit-all: unit-all.o $(patsubst %.cc,unit-%.o,$(UNITTEST_SOURCES))
 	$(HOSTCXX) $^ \
 		$(patsubst %,-L%,$(UNITTEST_LIBPATH)) $(patsubst %,-L%,$($*_LIBPATH)) \
+		$(patsubst %,-l%,$(UNITTEST_LIBS)) $(patsubst %,-l%,$($*_LIBS)) \
 		-o $@ $(UNITTEST_LDFLAGS)
 
 INCLUDEDCLEANS := $(INCLUDEDCLEANS) unit-clean
