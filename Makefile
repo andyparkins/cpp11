@@ -12,6 +12,7 @@
 # parameters
 CXX        := clang++
 HOSTCXX    := clang++
+LIBS       := lua5.2
 EXES       ?=
 
 # constants
